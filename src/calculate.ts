@@ -106,6 +106,6 @@ export const calculate = (calculation: string) => {
     parts = findAndCalculate(parts, ['+', '-'])
     return { result: parts[0] }
   } else {
-    return { error: 'Only supports simple calculation' }
+    return { error: 'Only supports simple calculation, numbers and /, *, + and -' }
   }
 }

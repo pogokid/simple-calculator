@@ -1,73 +1,85 @@
-import React, { CSSProperties, FormEvent, RefObject, useRef, useState } from 'react'
-import { PROXIMITY_1 } from '../../tokens'
-import { calculate, ICalculateResult } from '../../calculate'
+import React, {
+  FormEvent,
+  MouseEventHandler,
+  RefObject,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
+import { calculate, isOperand } from '../../calculate'
 import { Button } from '../Button/index'
-
-const formStyle: CSSProperties = {
-  padding: PROXIMITY_1,
-  display: 'flex',
-  flexDirection: 'column',
-}
-
-const labelStyle: CSSProperties = {
-  padding: `${PROXIMITY_1} 0 ${PROXIMITY_1} 0`,
-}
-
-const inputStyle: CSSProperties = {
-  display: 'block',
-}
-
-const errorStyle: CSSProperties = {
-  color: '#900',
-}
-
-let buttonGridStyle: CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr 1fr',
-}
+import {
+  buttonGridStyle,
+  calculationStyle,
+  formStyle,
+  inputErrorStyle,
+  inputStyle,
+  labelStyle,
+  operatorsGridStyle,
+  resultStyle,
+} from './styles'
 
 export const CalculatorForm = () => {
   const inputRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null)
-  const [{ result, error }, setResult] = useState<ICalculateResult>({})
+  const [calculation, setCalculation] = useState<string>('')
+  const { result, error } = useMemo(() => calculate(calculation), [calculation])
+
   const onSubmit = (e: FormEvent) => {
-    const calc = inputRef.current ? inputRef.current.value : ''
-    setResult(calculate(calc))
     e.preventDefault()
   }
-  const onButtonClick = (e: MouseEvent) => {}
+
+  const onButtonClick: MouseEventHandler<HTMLButtonElement> = e => {
+    const button = e.target as HTMLButtonElement
+    const value = button.innerText
+    if (value === 'C') {
+      setCalculation('')
+    } else if (isOperand(value)) {
+      setCalculation(`${calculation} ${value} `.trimLeft())
+    } else {
+      setCalculation(calculation + value)
+    }
+  }
   return (
-    <form style={formStyle} onSubmit={onSubmit}>
-      <label style={labelStyle} htmlFor="calculation">
-        Expression:
-      </label>
-      <input style={inputStyle} ref={inputRef} id="calculation" name="calculation" type="text" />
-      {error && (
-        <label style={{ ...labelStyle, ...errorStyle }} htmlFor="calculation">
-          {error}
-        </label>
-      )}
-      {result && (
+    <form style={formStyle} onSubmit={onSubmit} autoComplete="off">
+      <div style={calculationStyle}>
         <label style={labelStyle} htmlFor="calculation">
-          `The result is: ${result}`
+          Expression:
         </label>
-      )}
-      <div style={buttonGridStyle}>
-        <Button>7</Button>
-        <Button>8</Button>
-        <Button>9</Button>
-        <Button>4</Button>
-        <Button>5</Button>
-        <Button>6</Button>
-        <Button>1</Button>
-        <Button>2</Button>
-        <Button>3</Button>
-        <Button>0</Button>
+        <input
+          style={error && calculation !== '' ? inputErrorStyle : inputStyle}
+          ref={inputRef}
+          id="calculation"
+          name="calculation"
+          type="text"
+          value={calculation}
+          onChange={e => {
+            setCalculation(e.target.value)
+          }}
+        />
+      </div>
+      <div style={resultStyle}>
+        <label style={labelStyle} htmlFor="calculation">
+          = {result}
+        </label>
       </div>
       <div style={buttonGridStyle}>
-        <Button>/</Button>
-        <Button>x</Button>
-        <Button>-</Button>
-        <Button>+</Button>
+        <Button onClick={onButtonClick}>7</Button>
+        <Button onClick={onButtonClick}>8</Button>
+        <Button onClick={onButtonClick}>9</Button>
+        <Button onClick={onButtonClick}>4</Button>
+        <Button onClick={onButtonClick}>5</Button>
+        <Button onClick={onButtonClick}>6</Button>
+        <Button onClick={onButtonClick}>1</Button>
+        <Button onClick={onButtonClick}>2</Button>
+        <Button onClick={onButtonClick}>3</Button>
+        <Button onClick={onButtonClick}>0</Button>
+      </div>
+      <div style={operatorsGridStyle}>
+        <Button onClick={onButtonClick}>C</Button>
+        <Button onClick={onButtonClick}>/</Button>
+        <Button onClick={onButtonClick}>*</Button>
+        <Button onClick={onButtonClick}>-</Button>
+        <Button onClick={onButtonClick}>+</Button>
       </div>
     </form>
   )
