@@ -32,6 +32,17 @@ describe('calculate', () => {
   })
 
   describe('Given a calculation', () => {
+    describe('which is invalid', () => {
+      it('should only start with a number', function() {
+        expect(calculate('- 2 + 1').error).toBeTruthy()
+      })
+      it('should only end with a number', function() {
+        expect(calculate('2 - 2 -').error).toBeTruthy()
+      })
+      it.each(['x', '$'])('should only contain numbers and simple operands (%s)', function(calculation) {
+        expect(calculate(calculation).error).toBeTruthy()
+      })
+    })
     describe('with a single operator', () => {
       it.each([
         ['2 + 2', 4],

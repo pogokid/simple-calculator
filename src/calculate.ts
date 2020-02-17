@@ -13,7 +13,7 @@ export const isNumber = (potentialNumber: any): potentialNumber is number => typ
  * Is this calculation valid and only including the
  * functionality we are implementing
  */
-const isValid = (calculation: string) => /^[0-9\s\/\-+*.]+[0-9]$/g.test(calculation)
+const isValid = (calculation: string) => /^[0-9][0-9\s\/\-+*.]*[0-9]$/g.test(calculation)
 
 /**
  * Extract and parse a number from a particular part
@@ -103,9 +103,7 @@ export const calculate = (calculation: string) => {
   if (isValid(calculation)) {
     let parts = splitIntoCalculationParts(calculation)
     parts = findAndCalculate(parts, ['/', '*'])
-    console.log(parts)
     parts = findAndCalculate(parts, ['+', '-'])
-    console.log(parts)
     return { result: parts[0] }
   } else {
     return { error: 'Only supports simple calculation' }
