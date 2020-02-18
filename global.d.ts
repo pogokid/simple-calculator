@@ -1,5 +1,6 @@
-
 declare module '*.svg' {
-    const ReactComponent: React.ComponentType<React.ImgHTMLAttributes<HTMLImageElement>>
-    export = ReactComponent
+  const ReactComponent: React.ComponentType<React.ImgHTMLAttributes<
+    HTMLImageElement
+  >>
+  export default ReactComponent
 }
