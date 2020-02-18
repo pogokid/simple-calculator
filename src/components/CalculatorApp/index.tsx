@@ -1,4 +1,5 @@
-import React, { CSSProperties } from 'react'
+import * as React from 'react'
+import { CSSProperties } from 'react'
 import { Header } from '../Header/index'
 import { CalculatorForm } from '../CalculatorForm/index'
 import { EQUAL_EXPERTS_BLUE } from '../../tokens'

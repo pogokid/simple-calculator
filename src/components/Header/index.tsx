@@ -1,4 +1,5 @@
-import React, { CSSProperties } from 'react'
+import * as React from 'react'
+import { CSSProperties } from 'react'
 
 import EqualExpertsLogo from './logo.svg'
 import { EQUAL_EXPERTS_BLUE, PROXIMITY_1 } from '../../tokens'
