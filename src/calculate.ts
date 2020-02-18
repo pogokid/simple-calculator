@@ -6,21 +6,30 @@ export interface ICalculateResult {
 export type TOperand = '/' | '*' | '+' | '-'
 export type TCalculationPart = number | TOperand
 
-export const isOperand = (char: string | TCalculationPart): char is TOperand => /^[\/*+\-]$/.test(String(char))
-export const isNumber = (potentialNumber: any): potentialNumber is number => typeof potentialNumber == 'number'
+export const isOperand = (char: string | TCalculationPart): char is TOperand =>
+  /^[\/*+\-]$/.test(String(char))
+export const isNumber = (potentialNumber: any): potentialNumber is number =>
+  typeof potentialNumber === 'number'
 
 /**
  * Is this calculation valid and only including the
  * functionality we are implementing
  */
-const isValid = (calculation: string) => /^[0-9][0-9\s\/\-+*.]*[0-9]$/g.test(calculation)
+const isValid = (calculation: string) =>
+  /^[0-9][0-9\s\/\-+*.]*[0-9]$/g.test(calculation)
 
 /**
  * Extract and parse a number from a particular part
  * of a string
  */
-const getNumber = (withoutSpaces: string) => (lastOperandIndex: number, currentIndex?: number) => {
-  const lastNumberString = withoutSpaces.substring(lastOperandIndex + 1, currentIndex)
+const getNumber = (withoutSpaces: string) => (
+  lastOperandIndex: number,
+  currentIndex?: number
+) => {
+  const lastNumberString = withoutSpaces.substring(
+    lastOperandIndex + 1,
+    currentIndex
+  )
   return parseFloat(lastNumberString)
 }
 
@@ -56,7 +65,8 @@ export const replacePartsWithResult = (
   result: number
 ): TCalculationPart[] => {
   const before = operandIndex > 0 ? parts.slice(0, operandIndex - 1) : []
-  const after = operandIndex + 2 < parts.length ? parts.slice(operandIndex + 2) : []
+  const after =
+    operandIndex + 2 < parts.length ? parts.slice(operandIndex + 2) : []
   return [...before, result, ...after]
 }
 
@@ -64,8 +74,12 @@ export const replacePartsWithResult = (
  * Find the operand and do the calculation, repeating the process until
  * there are none left
  */
-const findAndCalculate = (parts: TCalculationPart[], operands: TOperand[]): TCalculationPart[] => {
-  const findOperand = (part: TCalculationPart) => isOperand(part) && operands.includes(part)
+const findAndCalculate = (
+  parts: TCalculationPart[],
+  operands: TOperand[]
+): TCalculationPart[] => {
+  const findOperand = (part: TCalculationPart) =>
+    isOperand(part) && operands.includes(part)
   const operandIndex = parts.findIndex(findOperand)
   if (operandIndex > -1) {
     const operand = parts[operandIndex] as TOperand
@@ -88,7 +102,8 @@ const findAndCalculate = (parts: TCalculationPart[], operands: TOperand[]): TCal
           break
       }
     }
-    if (isNumber(result)) parts = replacePartsWithResult(parts, operandIndex, result)
+    if (isNumber(result))
+      parts = replacePartsWithResult(parts, operandIndex, result)
     if (parts.find(findOperand)) {
       return findAndCalculate(parts, operands)
     }
@@ -106,6 +121,8 @@ export const calculate = (calculation: string) => {
     parts = findAndCalculate(parts, ['+', '-'])
     return { result: parts[0] }
   } else {
-    return { error: 'Only supports simple calculation, numbers and /, *, + and -' }
+    return {
+      error: 'Only supports simple calculation, numbers and /, *, + and -',
+    }
   }
 }

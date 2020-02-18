@@ -7,7 +7,9 @@
     "clean": "",
     "start": "webpack-dev-server",
     "build": "webpack",
-    "test": "jest"
+    "test": "yarn test:lint && yarn test:unit",
+    "test:lint": "tslint --project . && prettier --check './src/**/*.ts?(x)'",
+    "test:unit": "jest"
   },
   "author": "Dave Taylor <dave.taylor@pogokid.com>",
   "license": "GPL-3.0",
