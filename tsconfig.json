@@ -3,7 +3,8 @@
     "strict": true,
     "module": "ESNext",
     "target": "ESNext",
-    "jsx": "react"
+    "jsx": "react",
+    "esModuleInterop": true
   },
   "include": [
     "./global.d.ts",

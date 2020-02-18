@@ -4,7 +4,7 @@
   "description": "Simple calculator in React",
   "main": "src/index.tsx",
   "scripts": {
-    "clean": "",
+    "clean": "rm -rf ./dist",
     "start": "webpack-dev-server",
     "build": "webpack",
     "test": "yarn test:lint && yarn test:unit",
